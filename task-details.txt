@@ -1,0 +1,29 @@
+Task Details:
+Which technology is used? (Angular/React, NodeJS, MongoDB)
+
+Routing required
+
+1. Create a login/signup page
+- The user should be able to login/signup using email and password - Additionally user should be able to reset/forgot password
+
+2. After login user should be redirected to the home page
+
+- In the home page user should be able to create a task board(CRUD)
+- User should be able to add a task in the task board(CRUD)
+The user should be able to drag and drop the task from one board to another board.
+
+3. Create profile details page
+- The user should be able to update his profile details like name, profile picture(file upload functionality) etc.
+
+Your submission should exhibit your proficiency in these technologies and demonstrate your ability to implement these features effectively.
+
+Let's take your time and deliver this task by Monday  EOD ( 18th March 2024  ) 
+
+
+We will contact you on Tuesday (19th March 2024) to discuss your solution and approach.
+
+If you have any queries or require further clarification on the task, feel free to reach out to us.
+
+
+
+We look forward to reviewing your submission and discussing your approach
