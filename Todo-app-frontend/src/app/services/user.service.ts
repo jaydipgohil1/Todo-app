@@ -23,7 +23,11 @@ export class UserService {
     return this.http.get(`users/list`);
   }
 
-  updateUserRoleAndStatus(id: String, body: UserUpdate): Observable<any> {
-    return this.http.patch(`users/update/${id}`, body);
+  getUser(id: string): Observable<any> {
+    return this.http.get(`users/user/${id}`);
+  }
+
+  updateProfile(id: String, body: any): Observable<any> {
+    return this.http.patch(`users/update-profile/${id}`, body);
   }
 }

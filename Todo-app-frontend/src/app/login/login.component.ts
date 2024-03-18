@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit {
         }));
         this.authService.setIsAuthentic(true);
         this.initForm();
-        this.router.navigate(['/home']);
+        this.router.navigate(['/profile']);
       })
     } catch (error: any) {
       this.notificationService.showError('Something went wrong:' + error);

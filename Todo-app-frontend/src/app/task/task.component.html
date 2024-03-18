@@ -1,1 +1,150 @@
-<p>task works!</p>
+<div class="container d-flex justify-content-center mt-2">
+  <div class="card mb-3" style="width: 19rem">
+    <div class="card-body">
+      <h5 class="card-title">{{ "Add Task" }}</h5>
+      <form class="row g-3" [formGroup]="form">
+        <div class="col-auto">
+          <label for="inputPassword2" class="visually-hidden">Title</label>
+          <input
+            type="tex"
+            class="form-control"
+            id="inputPassword2"
+            placeholder="Enter Title"
+            formControlName="title"
+          />
+        </div>
+        <div class="col-auto">
+          <input
+            type="date"
+            class="form-control"
+            id="inputPassword2"
+            formControlName="date"
+            [min]="minDate"
+          />
+        </div>
+        <div class="col-auto">
+          <button
+            type="submit"
+            (click)="onSubmit()"
+            class="btn btn-primary mb-3"
+          >
+            {{ editTask?._id ? "Update" : "Add" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <h2>Boards</h2>
+  <div class="row">
+    <div
+      class="lane col lane-1"
+      cdkDropList
+      #todo="cdkDropList"
+      [cdkDropListData]="toDoList"
+      [cdkDropListConnectedTo]="[inProgress]"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div class="heading todo">To Do</div>
+      <div
+        *ngFor="let item of toDoList; let ii = index"
+        class="task"
+        [ngClass]="{
+          priorityLow: true
+        }"
+        cdkDrag
+      >
+        <div class="card" style="width: 18rem">
+          <div class="card-body">
+            <p class="card-text" style="margin: 0px">{{ item.title }}</p>
+            <p>
+              {{ item.date | date }}
+
+              <i style="float: right" (click)="edit(item)">Edit</i>
+              <i
+                style="float: right; padding-right: 8px; color: blue"
+                (click)="trash(toDoList, ii, item)"
+                >Delete</i
+              >
+            </p>
+          </div>
+          <!-- card body -->
+        </div>
+        <!-- card -->
+      </div>
+    </div>
+
+    <div
+      class="lane col lane-2"
+      cdkDropList
+      #inProgress="cdkDropList"
+      [cdkDropListData]="inProgressList"
+      [cdkDropListConnectedTo]="[todo, done]"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div class="heading doing">In Progress</div>
+      <div
+        *ngFor="let item of inProgressList; let ii = index"
+        class="task"
+        [ngClass]="{
+          priorityMedium: true
+        }"
+        cdkDrag
+      >
+        <div class="card" style="width: 18rem">
+          <div class="card-body">
+            <p class="card-text" style="margin: 0px">{{ item.title }}</p>
+            <p>
+              {{ item.date | date }}
+              <i style="float: right" (click)="edit(item)">Edit</i>
+              <i
+                style="float: right; padding-right: 8px; color: blue"
+                (click)="trash(inProgressList, ii, item)"
+                >Delete</i
+              >
+            </p>
+          </div>
+          <!-- card body -->
+        </div>
+        <!-- card -->
+      </div>
+    </div>
+
+    <div
+      class="lane col lane-2"
+      cdkDropList
+      #done="cdkDropList"
+      [cdkDropListData]="doneList"
+      [cdkDropListConnectedTo]="[todo, inProgress]"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div class="heading done">Done</div>
+      <div
+        *ngFor="let item of doneList; let ii = index"
+        class="task"
+        [ngClass]="{
+          priorityHigh: true
+        }"
+        cdkDrag
+      >
+        <div class="card" style="width: 18rem">
+          <div class="card-body">
+            <p class="card-text" style="margin: 0px">{{ item.title }}</p>
+            <p>
+              {{ item.date | date }}
+              <i style="float: right"(click)="edit(item)">Edit</i>
+              <i
+                style="float: right; padding-right: 8px; color: blue"
+                (click)="trash(doneList, ii, item)"
+                >Delete</i
+              >
+            </p>
+          </div>
+          <!-- card body -->
+        </div>
+        <!-- card -->
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const { secret } = require('../config/secretKey');
 const apiResponse = require("../helpers/apiResponse");
 const mongoose = require('mongoose');
+const multer = require('multer');
 
 async function handleCreate(req, res) {
   try {
@@ -66,6 +67,15 @@ async function handleGetList(req, res) {
     return apiResponse.validationErrorWithData(res, error.message, { success: false });
   }
 }
+async function handleGetUser(req, res) {
+  try {
+    const objectId = new mongoose.Types.ObjectId(req.params.id);
+    let users = await userModel.find({   '_id': objectId }).select('-password');
+    apiResponse.successResponseWithData(res, "fetch users Success.", users);
+  } catch (error) {
+    return apiResponse.validationErrorWithData(res, error.message, { success: false });
+  }
+}
 
 async function handleUpdateUserRoleAndStatus(req, res) {
   try {
@@ -84,10 +94,61 @@ async function handleUpdateUserRoleAndStatus(req, res) {
   }
 }
 
+
+// Multer configuration for file upload
+// Multer configuration for file upload
+const upload = multer({ 
+  storage: multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/'); // Specify the upload path here
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + path.extname(file.originalname)); // Use the current timestamp as the filename
+    }
+  })
+}).single('avatar'); // Assuming the field name for the file is 'avatar'
+
+async function handleUpdateProfile(req, res) {
+  try {
+    // Call Multer middleware to handle file upload
+    // upload(req, res, async function (err) {
+    //   if (err instanceof multer.MulterError) {
+    //     return res.status(400).json({ success: false, message: err.message });
+    //   } else if (err) {
+    //     return res.status(500).json({ success: false, message: err.message });
+    //   }
+    //   // If file is uploaded successfully, proceed with updating the user profile
+    //   const objectId = new mongoose.Types.ObjectId(req.params.id);
+    //   const updateFields = req.body;
+
+    //   // If file is uploaded, update the avatar field in the updateFields object
+    //   if (req.file) {
+    //     updateFields.avatar = req.file.path; // Assuming you want to save the file path in the database
+    //   }
+
+    // });
+    // Add updated_at field
+    const objectId = new mongoose.Types.ObjectId((req.params.id).toString());
+    req.body.updated_at = new Date();
+    console.log(objectId);
+    const result = await userModel.updateOne(
+      { '_id': objectId },
+      { $set: req.body }
+    );
+    if (result.modifiedCount && result.acknowledged) {
+      return apiResponse.successResponseWithData(res, "User Update Success.", result);
+    }
+    else return apiResponse.validationErrorWithData(res, "No User Update", { success: false });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: error.message });
+  }
+}
+
 module.exports =
 {
   handleCreate,
   handleLogin,
   handleGetList,
-  handleUpdateUserRoleAndStatus
+  handleUpdateProfile,
+  handleGetUser
 }
