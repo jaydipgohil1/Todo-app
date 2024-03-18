@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
+const { handleCreate, handleLogin, handleGetList, handleUpdateUserRoleAndStatus } = require("../controllers/users")
+const authenticateToken = require('../middleware/authenticate');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+router.post('/register', handleCreate);
+router.post('/login', handleLogin);
+router.get('/list', authenticateToken, handleGetList);
+router.patch('/update/:id', authenticateToken, handleUpdateUserRoleAndStatus);
 
 module.exports = router;

@@ -1,1 +1,130 @@
-<p>signup works!</p>
+<div class="d-flex justify-content-center">
+  <div class="wrapper">
+    <div class="title">Registration</div>
+    <form [formGroup]="registrationForm">
+      <div>
+        <div class="user-details">
+          <div class="input-box">
+            <span class="details">Full Name</span>
+            <input
+              type="text"
+              placeholder="Enter your fullname"
+              formControlName="fullName"
+            />
+            <div
+              class="error-message"
+              *ngIf="(fullName?.touched || isSubmitted) && fullName?.invalid"
+            >
+              <div *ngIf="fullName?.hasError('required')">
+                FullName is required
+              </div>
+            </div>
+          </div>
+
+          <div class="input-box">
+            <span class="details">E-Mail</span>
+            <input
+              type="text"
+              placeholder="Enter your E-Mail"
+              formControlName="email"
+            />
+            <div
+              class="error-message"
+              *ngIf="(email?.touched || isSubmitted) && email?.invalid"
+            >
+              <div *ngIf="email?.hasError('required')">Email is required</div>
+              <div class="error-message" *ngIf="email?.hasError('email')">
+                Email is invalid
+              </div>
+            </div>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Password</span>
+            <input
+              type="password"
+              placeholder="Enter your Password"
+              formControlName="password"
+              maxlength="10"
+            />
+            <div
+              class="error-message"
+              *ngIf="(password?.touched || isSubmitted) && password?.invalid"
+            >
+              <div *ngIf="password?.hasError('required')">
+                Password is required.
+              </div>
+              <span *ngIf="password?.dirty">
+                <span
+                  class="block"
+                  [ngClass]="{
+                    'text-primary': password?.value?.match('^(?=.*[A-Z])')
+                  }"
+                  >At least oneu ppercase letter.</span
+                >
+                <span
+                  class="block"
+                  [ngClass]="{
+                    'text-primary': password?.value?.match('(?=.*[a-z])')
+                  }"
+                  >At least one lowercase letter.</span
+                >
+                <span
+                  class="block"
+                  [ngClass]="{
+                    'text-primary': password?.value?.match('(.*[0-9].*)')
+                  }"
+                  >At least one digit.</span
+                >
+                <span
+                  class="block"
+                  [ngClass]="{
+                    'text-primary': password?.value?.match('(?=.*[!@#$%^&*])')
+                  }"
+                  >At least one special character.</span
+                >
+                <span
+                  class="block"
+                  [ngClass]="{
+                    'text-primary': password?.value?.match('.{8,}')
+                  }"
+                  >At least 8 characters long.</span
+                >
+              </span>
+            </div>
+          </div>
+          <div class="input-box">
+            <span class="details">Confirm Password</span>
+            <input
+              type="password"
+              placeholder="Confirm your Password"
+              formControlName="confirmPassword"
+              maxlength="10"
+            />
+            <div
+              class="error-message"
+              *ngIf="
+                (confirmPassword?.touched || isSubmitted) &&
+                confirmPassword?.invalid
+              "
+            >
+              <div *ngIf="confirmPassword?.hasError('required')">
+                Confirm Password is required.
+              </div>
+              <div
+                *ngIf="confirmPassword?.errors?.['confirmPasswordValidator']"
+              >
+                Password and Confirm Password didn't match.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="button">
+        <input type="submit" [value]="'Register'" (click)="onSubmit()" />
+        <p>Already have an account? <a [routerLink]="'/log-in'">Log In</a>.</p>
+      </div>
+    </form>
+  </div>
+</div>

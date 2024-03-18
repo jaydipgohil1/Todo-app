@@ -1,1 +1,53 @@
-<p>profile works!</p>
+<div class="d-flex justify-content-center align-items-center top-wrapper">
+  <div class="card" style="width: 22rem">
+    <h5 class="card-header">
+      {{ isEdit ? "Edit Profile" : "Profile Info" }}
+    </h5>
+    <ng-container *ngIf="!isEdit">
+      <img [src]="imageUrl" class="card-img-top" alt="..." />
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">
+          Some quick example text to build on the card title and make up the
+          bulk of the card's content.
+        </p>
+      </div>
+      <!-- <ul class="list-group list-group-flush">
+      <li class="list-group-item">An item</li>
+
+    </ul> -->
+      <div class="card-body">
+        <button class="btn btn-primary" (click)="editToggle()">
+          Edit Profile
+        </button>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="isEdit">
+      <div class="card-body">
+        <div class="mb-3">
+          <label for="exampleFormControlInput1" class="form-label">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="exampleFormControlInput1"
+            placeholder="Enter Name"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="formFileLg" class="form-label">
+            Upload profile Image</label
+          >
+          <input
+            class="form-control form-control-lg"
+            id="formFileLg"
+            type="file"
+            (change)="onFileSelected($event)"
+          />
+        </div>
+        <div class="mt-3">
+          <button class="btn btn-primary" (click)="editToggle()">Update</button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

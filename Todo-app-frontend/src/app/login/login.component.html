@@ -1,1 +1,51 @@
-<p>login works!</p>
+<div class="d-flex justify-content-center">
+  <div class="wrapper">
+    <div class="title">Log In</div>
+    <form [formGroup]="loginForm">
+      <div>
+        <div class="user-details">
+          <div class="input-box">
+            <span class="details">E-Mail</span>
+            <input
+              type="text"
+              placeholder="Enter your E-Mail"
+              formControlName="email"
+            />
+            <div
+              class="error-message"
+              *ngIf="(email?.touched || isSubmitted) && email?.invalid"
+            >
+              <div *ngIf="email?.hasError('required')">Email is required</div>
+              <div class="error-message" *ngIf="email?.hasError('email')">
+                Email is invalid
+              </div>
+            </div>
+          </div>
+
+          <div class="input-box">
+            <span class="details">Password</span>
+            <input
+              type="password"
+              placeholder="Enter your Password"
+              formControlName="password"
+              maxlength="10"
+            />
+            <div
+              class="error-message"
+              *ngIf="(password?.touched || isSubmitted) && password?.invalid"
+            >
+              <div *ngIf="password?.hasError('required')">
+                Password is required.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="button">
+        <input type="submit" [value]="'Log In'" (click)="onSubmit()" />
+        <p>Don't have an account? <a [routerLink]="'/sign-up'">Sign Up</a>.</p>
+      </div>
+    </form>
+  </div>
+</div>
