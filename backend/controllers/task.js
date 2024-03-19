@@ -7,6 +7,7 @@ async function handleCreate(req, res) {
     if (req.body.title) {
       const existingTask = await Task.findOne({
         title: req.body.title,
+        user_id: req.user._id,
       });
 
       if (existingTask)

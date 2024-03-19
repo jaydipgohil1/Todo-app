@@ -33,13 +33,11 @@ async function handleCreate(req, res) {
         "Registration Success.",
         result
       );
-      // res.status(200).json({ data: result, code: 200, success: true });
     }
   } catch (error) {
     return apiResponse.validationErrorWithData(res, error.message, {
       success: false,
     });
-    // res.status(400).send({ error: error, success: false });
   }
 }
 
@@ -68,7 +66,6 @@ async function handleLogin(req, res) {
       "Email or Password not provided.",
       "Invalid Data"
     );
-    // res.status(200).json({ error: 'Email or Password not provided', code: 200, success: false });
   }
 }
 
@@ -116,7 +113,6 @@ async function handleUpdateProfile(req, res) {
     // Call Multer middleware to handle file upload
     upload(req, res, async function (err) {
       if (err instanceof multer.MulterError) {
-        console.log(err);
         return res.status(400).json({ success: false, message: err.message });
       } else if (err) {
         return res.status(500).json({ success: false, message: err.message });
@@ -128,7 +124,7 @@ async function handleUpdateProfile(req, res) {
 
       // If file is uploaded, update the avatar field in the updateFields object
       if (req.file) {
-        updateFields.file = req.file.path; // Assuming you want to save the file path in the database
+        updateFields.file = req.file.filename; // Assuming you want to save the file path in the database
       }
 
       // Add updated_at field
@@ -201,10 +197,8 @@ async function handleForgotPassword(req, res) {
     // return res.status(200).json({ resetToken: `${req.headers.origin}/reset-password/${resetToken}` });
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.log(error);
         return res.status(500).json({ message: "Failed to send reset email." });
       } else {
-        console.log("Email sent: " + info.response);
         return res
           .status(200)
           .json({ message: "Reset email sent successfully." });
@@ -221,17 +215,12 @@ async function handleForgotPassword(req, res) {
 async function handleResetPassword(req, res) {
   try {
     const { token, newPassword } = req.body;
-    // Decode token to get email
-    // const decoded = jwt.verify(token, secret);
-    // const email = decoded.email;
     const email = decodeToken(token);
-    console.log(email);
     // Find user by email
-    const user = await userModel.findOne({ email:email });
-    console.log(user);
+    const user = await userModel.findOne({ email: email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
-    } 
+    }
     // Update user's password
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(newPassword, salt);

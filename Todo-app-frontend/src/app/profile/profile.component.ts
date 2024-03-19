@@ -32,7 +32,8 @@ export class ProfileComponent implements OnInit {
     this.userService.getUser(this.userData._id).subscribe(data => {
       if (!data.data) return;
       this.userData = data.data;
-      this.imageUrl = data.data.file
+      if(data.data.file)
+      this.imageUrl = "http://localhost:3000/uploads/" + data.data.file
     })
   }
 
@@ -55,8 +56,14 @@ export class ProfileComponent implements OnInit {
       const maxFileSizeMB = 5; // Maximum file size allowed in megabytes
       const maxSizeBytes = maxFileSizeMB * 1024 * 1024; // Convert MB to bytes
       if (this.selectedFile.size > maxSizeBytes) {
-        // this.errorMessage = `File size exceeds ${maxFileSizeMB}MB limit.`;
-      } else {
+        this.errorMessage = `File size exceeds ${maxFileSizeMB}MB limit.`;
+        this.notificationService.showError(this.errorMessage);
+      }
+      else if (!['image/jpeg', 'image/png'].includes(this.selectedFile.type)) {
+        this.errorMessage = 'Only JPG and PNG files are allowed.';
+        this.notificationService.showError(this.errorMessage);
+      }
+      else {
         const formData = new FormData();
         formData.append('file', this.selectedFile, this.selectedFile.name);
         formData.append('name', this.form.value.name);

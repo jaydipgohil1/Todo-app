@@ -43,7 +43,6 @@ export class TaskComponent implements OnInit {
 
   trash(list: any[], index: any, item: any) {
     list.splice(index, 1);
-    console.log('list', list, index);
     this.taskService.deleteTask(item._id).subscribe(task => {
       if (!task.data) return
       this.getTaskList()
