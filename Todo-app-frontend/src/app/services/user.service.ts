@@ -22,6 +22,9 @@ export class UserService {
   forgotPassword(payload: UserPayload): Observable<any> {
     return this.http.post(`users/forgot-password`, payload);
   }
+  resetPassword(payload: any): Observable<any> {
+    return this.http.post(`users/reset-password`, payload);
+  }
 
   getUserList(): Observable<any> {
     return this.http.get(`users/list`);

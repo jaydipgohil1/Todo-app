@@ -6,6 +6,7 @@ const apiResponse = require("../helpers/apiResponse");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const path = require("path");
+const { generateToken, decodeToken } = require("../middleware/utils"); //
 
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
@@ -159,7 +160,7 @@ async function handleForgotPassword(req, res) {
   const { email } = req.body;
 
   // Step 2: Generate Reset Token
-  const resetToken = crypto.randomBytes(20).toString("hex");
+  const resetToken = generateToken(email);
 
   try {
     // Find user by email
@@ -177,15 +178,17 @@ async function handleForgotPassword(req, res) {
 
     // Step 3: Send Reset Email
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "live.smtp.mailtrap.io", // SMTP server host
+      port: 587, // SMTP port (typically 587 for TLS or 465 for SSL)
+      secure: false, // Set to true if using SSL (port 465)
       auth: {
-        user: "", // Your Gmail email address
-        pass: "", // Your Gmail password or an application-specific password
+        user: "api", // Your email address
+        pass: "", // Your email password or app-specific password
       },
     });
 
     const mailOptions = {
-      from: "yonik37923@irnini.com",
+      from: "hi@demomailtrap.com",
       to: email,
       subject: "Password Reset Request",
       text:
@@ -195,6 +198,7 @@ async function handleForgotPassword(req, res) {
         `If you did not request this, please ignore this email and your password will remain unchanged.\n`,
     };
 
+    // return res.status(200).json({ resetToken: `${req.headers.origin}/reset-password/${resetToken}` });
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.log(error);
@@ -214,6 +218,30 @@ async function handleForgotPassword(req, res) {
   }
 }
 
+async function handleResetPassword(req, res) {
+  try {
+    const { token, newPassword } = req.body;
+    // Decode token to get email
+    // const decoded = jwt.verify(token, secret);
+    // const email = decoded.email;
+    const email = decodeToken(token);
+    console.log(email);
+    // Find user by email
+    const user = await userModel.findOne({ email:email });
+    console.log(user);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    } 
+    // Update user's password
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(newPassword, salt);
+    user.password = hash;
+    await user.save();
+    res.status(200).json({ message: "Password reset successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
 module.exports = {
   handleCreate,
   handleLogin,
@@ -221,4 +249,5 @@ module.exports = {
   handleUpdateProfile,
   handleGetUser,
   handleForgotPassword,
+  handleResetPassword,
 };
