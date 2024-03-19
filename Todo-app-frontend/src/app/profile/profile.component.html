@@ -1,12 +1,12 @@
-<div class="d-flex justify-content-center align-items-center top-wrapper">
+<div class="d-flex justify-content-center mt-3">
   <div class="card" style="width: 22rem">
     <h5 class="card-header">
       {{ isEdit ? "Edit Profile" : "Profile Info" }}
     </h5>
     <ng-container *ngIf="!isEdit">
-      <img [src]="imageUrl" class="card-img-top" alt="..." />
+      <img [src]="imageUrl" class="card-img-top" alt="Profile" />
       <div class="card-body">
-        <h5 class="card-title">{{ userData.name || "Name" }}</h5>
+        <h5 class="card-title">Name : {{ userData.name || "Name" }}</h5>
         <p class="card-text"></p>
       </div>
       <!-- <ul class="list-group list-group-flush">
@@ -35,7 +35,7 @@
               placeholder="Enter Name"
             />
           </div>
-          <div class="mb-3" *ngIf="false">
+          <div class="mb-3">
             <label for="formFileLg" class="form-label">
               Upload profile Image</label
             >
@@ -43,6 +43,7 @@
               class="form-control form-control-lg"
               id="formFileLg"
               type="file"
+              enctype="multipart/form-data"
               (change)="onFileSelected($event)"
             />
           </div>

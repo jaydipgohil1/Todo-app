@@ -8,14 +8,16 @@ import { LoginComponent } from './login/login.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { TaskComponent } from './task/task.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent,canActivate: [AuthGuard], },
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard], },
+  // { path: 'home', component: HomeComponent, canActivate: [AuthGuard], },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard], },
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard], },
   { path: 'sign-up', component: SignupComponent },
   { path: 'log-in', component: LoginComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
   { path: 'task', component: TaskComponent },
   { path: '**', component: PageNotFoundComponent },
 ];

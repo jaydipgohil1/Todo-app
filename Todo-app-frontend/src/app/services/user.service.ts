@@ -19,6 +19,10 @@ export class UserService {
     return this.http.post(`users/login`, payload);
   }
 
+  forgotPassword(payload: UserPayload): Observable<any> {
+    return this.http.post(`users/forgot-password`, payload);
+  }
+
   getUserList(): Observable<any> {
     return this.http.get(`users/list`);
   }
@@ -28,6 +32,6 @@ export class UserService {
   }
 
   updateProfile(id: String, body: any): Observable<any> {
-    return this.http.patch(`users/update-profile/${id}`, body);
+    return this.http.post(`users/update-profile/${id}`, body);
   }
 }

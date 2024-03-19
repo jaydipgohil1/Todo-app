@@ -18,14 +18,4 @@ export class NotificationService {
       timeOut: 3000,
     });
   }
-  showInfo(message: string) {
-    this.toastrService.info(message, 'Info', {
-      timeOut: 3000,
-    });
-  }
-  showWarning(message: string) {
-    this.toastrService.warning(message, 'Warning', {
-      timeOut: 3000,
-    });
-  }
 }

@@ -16,6 +16,7 @@ async function handleCreate(req, res) {
           { success: false }
         );
       else {
+        req.body.user_id = req.user._id;
         const newTask = new Task(req.body);
         let result = await newTask.save();
         result = result.toObject();
@@ -111,7 +112,7 @@ async function handleUpdate(req, res) {
 
 async function handleGetList(req, res) {
   try {
-    let tasks = await Task.find({}).sort({ date: 1 });
+    let tasks = await Task.find({ user_id: req.user._id }).sort({ date: 1 });
 
     apiResponse.successResponseWithData(res, "Fetch Task Success.", tasks);
   } catch (error) {

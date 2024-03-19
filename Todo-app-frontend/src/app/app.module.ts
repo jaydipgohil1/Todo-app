@@ -17,6 +17,7 @@ import { HttpErrorInterceptor } from './interceptor/error-handling-interceptor';
 import { AuthInterceptor } from './interceptor/auth-interceptor';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     ProfileComponent,
     PageNotFoundComponent,
     DashboardComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,

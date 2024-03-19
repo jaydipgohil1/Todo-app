@@ -23,8 +23,17 @@ export class ProfileComponent implements OnInit {
     let data = localStorage.getItem('user')
     if (data) {
       this.userData = JSON.parse(data)
+      this.getUserData()
     }
     this.initForm();
+  }
+
+  getUserData() {
+    this.userService.getUser(this.userData._id).subscribe(data => {
+      if (!data.data) return;
+      this.userData = data.data;
+      this.imageUrl = data.data.file
+    })
   }
 
   initForm() {
@@ -42,28 +51,41 @@ export class ProfileComponent implements OnInit {
   }
 
   onUpload() {
-    // if (this.selectedFile) {
-    const maxFileSizeMB = 5; // Maximum file size allowed in megabytes
-    const maxSizeBytes = maxFileSizeMB * 1024 * 1024; // Convert MB to bytes
-    // if (this.selectedFile.size > maxSizeBytes) {
-    //   // this.errorMessage = `File size exceeds ${maxFileSizeMB}MB limit.`;
-    // } else {
-    const formData = new FormData();
-    // formData.append('file', this.selectedFile, this.selectedFile.name);
-    try {
-      this.userService.updateProfile(this.userData._id, this.form.value).subscribe(user => {
-        if (!user.data) return
-        this.userData.name = this.form.value.name
-        this.editToggle()
-        localStorage.setItem("user",JSON.stringify(this.userData))
-      })
-    } catch (error: any) {
-      this.notificationService.showError('Something went wrong:' + error);
+    if (this.selectedFile) {
+      const maxFileSizeMB = 5; // Maximum file size allowed in megabytes
+      const maxSizeBytes = maxFileSizeMB * 1024 * 1024; // Convert MB to bytes
+      if (this.selectedFile.size > maxSizeBytes) {
+        // this.errorMessage = `File size exceeds ${maxFileSizeMB}MB limit.`;
+      } else {
+        const formData = new FormData();
+        formData.append('file', this.selectedFile, this.selectedFile.name);
+        formData.append('name', this.form.value.name);
+        try {
+          this.userService.updateProfile(this.userData._id, formData).subscribe(user => {
+            if (!user.data) return
+            this.userData.name = this.form.value.name
+            this.editToggle()
+            this.getUserData()
+            localStorage.setItem("user", JSON.stringify(this.userData))
+          })
+        } catch (error: any) {
+          this.notificationService.showError('Something went wrong:' + error);
+        }
+      }
+    } else {
+      try {
+        this.userService.updateProfile(this.userData._id, this.form.value).subscribe(user => {
+          if (!user.data) return
+          this.userData.name = this.form.value.name
+          this.editToggle()
+          this.getUserData()
+          localStorage.setItem("user", JSON.stringify(this.userData))
+        })
+      } catch (error: any) {
+        this.notificationService.showError('Something went wrong:' + error);
+      }
+      // this.errorMessage = 'Please select a file before uploading.';
     }
-    // }
-    // } else {
-    //   this.errorMessage = 'Please select a file before uploading.';
-    // }
   }
 
 }
