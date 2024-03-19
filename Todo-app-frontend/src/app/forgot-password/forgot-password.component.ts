@@ -50,9 +50,8 @@ export class ForgotPasswordComponent implements OnInit {
     if (this.loginForm.invalid) return;
     try {
       this.userService.forgotPassword(this.loginForm.value).subscribe(user => {
-        if (!user?.data) return;
-        debugger
-
+        if (!user?.message) return;
+        this.notificationService.showSuccess(user.message);
         this.initForm();
       })
     } catch (error: any) {

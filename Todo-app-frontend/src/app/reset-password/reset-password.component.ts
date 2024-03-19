@@ -52,9 +52,9 @@ export class ResetPasswordComponent implements OnInit {
         token: this.token, newPassword: this.form.value.password
       }
       this.userService.resetPassword(payload).subscribe(user => {
-        if (!user?.data) return;
-
-
+        if (!user?.message) return;
+        this.notificationService.showSuccess(user.message);
+        this.initForm();
       })
     } catch (error: any) {
       this.notificationService.showError('Something went wrong:' + error);
